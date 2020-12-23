@@ -6,7 +6,7 @@ It contains implementation of various Supervised and Unsupervised Machine Learni
 - Random Forest: Implements Random Forest for both classification and Regression. Implement Ensemble Learning using Random Forest and Linear Regression
 - SVM: Implements SVM classifier using python libraries 
 
- **Machine Learning Projects: 
+ **Machine Learning Projects**: 
  
 => Clustering&PCA: Perform Unsupervised k means clustering to design an environment to predict a class/category from a dataset based on specific features of that class. However, all the features are not strong enough or in other words features not that much variance/uniqueness across the classes. So clustering model needs to be designed. Following steps were performed:
 - Loading the dataset into a pandas dataframe
@@ -32,7 +32,7 @@ Environment and its changes are the most complex system.The dataset contains tot
 - Create a regularised Regression model by implementing Ridge Regression, Grid Search CV, kfold Cross validation and calculate accuracy
 - Implement Logistic Regression to predict Precipitation Type Columns class label
 - Discuss the test performance using precision, recall and confusion matrix
--
+
 
 
 
