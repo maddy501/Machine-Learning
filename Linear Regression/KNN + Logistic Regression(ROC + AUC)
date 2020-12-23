@@ -1,0 +1,441 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Regression_&_Fine_Tuning_Model.ipynb",
+      "provenance": [],
+      "collapsed_sections": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "yXuodhSy4Z-X"
+      },
+      "source": [
+        "## **KNN +Confusion Matrix and Classification Report**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "BuR7aYp04oDW"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from sklearn.metrics import confusion_matrix\n",
+        "from sklearn.metrics import classification_report\n",
+        "\n",
+        "# Create training and test set\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.4,random_state=42)\n",
+        "\n",
+        "# Instantiate a k-NN classifier: knn\n",
+        "knn = KNeighborsClassifier(n_neighbors=6)\n",
+        "\n",
+        "# Fit the classifier to the training data\n",
+        "knn.fit(X_train,y_train)\n",
+        "\n",
+        "# Predict the labels of the test data: y_pred\n",
+        "y_pred = knn.predict(X_test)\n",
+        "\n",
+        "# Generate the confusion matrix and classification report\n",
+        "print(confusion_matrix(y_test,y_pred))\n",
+        "print(classification_report(y_test, y_pred))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "nT0p3pgs6omP"
+      },
+      "source": [
+        "# **Logistic regression model**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "uStiLHGs6ray"
+      },
+      "source": [
+        "Import:\n",
+        "LogisticRegression from sklearn.linear_model.\n",
+        "confusion_matrix and classification_report from sklearn.metrics.\n",
+        "Create training and test sets with 40% (or 0.4) of the data used for testing. Use a random state of 42. This has been done for you.\n",
+        "Instantiate a LogisticRegression classifier called logreg.\n",
+        "Fit the classifier to the training data and predict the labels of the test set.\n",
+        "Compute and print the confusion matrix and classification report. This has been done for you, so hit 'Submit Answer' to see how logistic regression compares to k-NN!"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "gBkFTcS76yw-"
+      },
+      "source": [
+        "# Import the necessary modules\n",
+        "from sklearn.metrics import classification_report\n",
+        "from sklearn.metrics import confusion_matrix\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "\n",
+        "# Create training and test sets\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.4, random_state=42)\n",
+        "\n",
+        "# Create the classifier: logreg\n",
+        "logreg = LogisticRegression()\n",
+        "\n",
+        "# Fit the classifier to the training data\n",
+        "logreg.fit(X_train,y_train)\n",
+        "\n",
+        "# Predict the labels of the test set: y_pred\n",
+        "y_pred = logreg.predict(X_test)\n",
+        "\n",
+        "# Compute and print the confusion matrix and classification report\n",
+        "print(confusion_matrix(y_test, y_pred))\n",
+        "print(classification_report(y_test, y_pred))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "XK8En9TP7hXG"
+      },
+      "source": [
+        "# **Plotting an ROC curve**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "p68dN1e67-aw"
+      },
+      "source": [
+        "Classification reports and confusion matrices are great methods to quantitatively evaluate model performance, while ROC curves provide a way to visually evaluate models. As Hugo demonstrated in the video, most classifiers in scikit-learn have a .predict_proba() method which returns the probability of a given sample being in a particular class. Having built a logistic regression model, you'll now evaluate its performance by plotting an ROC curve. In doing so, you'll make use of the .predict_proba() method and become familiar with its functionality."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "_utGHyHm7_U2"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from sklearn.metrics import roc_curve\n",
+        "\n",
+        "# Compute predicted probabilities: y_pred_prob\n",
+        "y_pred_prob = logreg.predict_proba(X_test)[:,1]\n",
+        "\n",
+        "# Generate ROC curve values: fpr, tpr, thresholds\n",
+        "fpr, tpr, thresholds = roc_curve(y_test, y_pred_prob)\n",
+        "\n",
+        "# Plot ROC curve\n",
+        "plt.plot([0, 1], [0, 1], 'k--')\n",
+        "plt.plot(fpr, tpr)\n",
+        "plt.xlabel('False Positive Rate')\n",
+        "plt.ylabel('True Positive Rate')\n",
+        "plt.title('ROC Curve')\n",
+        "plt.show()"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "f20bVTKI_nMf"
+      },
+      "source": [
+        "# **AUC computation**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "o7_8BDHe_xLD"
+      },
+      "source": [
+        "In this exercise, you'll calculate AUC scores using the roc_auc_score() function from sklearn.metrics as well as by performing cross-validation on the diabetes dataset.\n",
+        "If the AUC is greater than 0.5, the model is better than random guessing. Always a good sign!"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "zhWiaI_1_4s4"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from sklearn.model_selection import cross_val_score\n",
+        "from sklearn.metrics import roc_auc_score\n",
+        "\n",
+        "# Compute predicted probabilities: y_pred_prob\n",
+        "y_pred_prob = logreg.predict_proba(X_test)[:,1]\n",
+        "\n",
+        "# Compute and print AUC score\n",
+        "print(\"AUC: {}\".format(roc_auc_score(y_test, y_pred_prob)))\n",
+        "\n",
+        "# Compute cross-validated AUC scores: cv_auc\n",
+        "cv_auc = cross_val_score(logreg, X, y, cv=5, scoring='roc_auc')\n",
+        "\n",
+        "# Print list of AUC scores\n",
+        "print(\"AUC scores computed using 5-fold cross-validation: {}\".format(cv_auc))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "qJa2y_mreMYm"
+      },
+      "source": [
+        "# **Hyperparameter tuning with GridSearchCV**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "DkVVsEa1femC"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn.model_selection import GridSearchCV\n",
+        "\n",
+        "# Setup the hyperparameter grid\n",
+        "c_space = np.logspace(-5, 8, 15)\n",
+        "param_grid = {'C': c_space}\n",
+        "\n",
+        "# Instantiate a logistic regression classifier: logreg\n",
+        "logreg = LogisticRegression()\n",
+        "\n",
+        "# Instantiate the GridSearchCV object: logreg_cv\n",
+        "logreg_cv = GridSearchCV(logreg, param_grid, cv=5)\n",
+        "\n",
+        "# Fit it to the data\n",
+        "logreg_cv.fit(X,y)\n",
+        "\n",
+        "# Print the tuned parameters and score\n",
+        "print(\"Tuned Logistic Regression Parameters: {}\".format(logreg_cv.best_params_)) \n",
+        "print(\"Best score is {}\".format(logreg_cv.best_score_))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "Yo_xizDCgSRj"
+      },
+      "source": [
+        "# **Hyperparameter tuning with RandomizedSearchCV and Decision Tree Classifier**"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "4L42bkO9gWwF"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from scipy.stats import randint\n",
+        "from sklearn.tree import DecisionTreeClassifier \n",
+        "from sklearn.model_selection import RandomizedSearchCV\n",
+        "\n",
+        "# Setup the parameters and distributions to sample from: param_dist\n",
+        "param_dist = {\"max_depth\": [3, None],\n",
+        "              \"max_features\": randint(1, 9),\n",
+        "              \"min_samples_leaf\": randint(1, 9),\n",
+        "              \"criterion\": [\"gini\", \"entropy\"]}\n",
+        "\n",
+        "# Instantiate a Decision Tree classifier: tree\n",
+        "tree = DecisionTreeClassifier()\n",
+        "\n",
+        "# Instantiate the RandomizedSearchCV object: tree_cv\n",
+        "tree_cv = RandomizedSearchCV(tree, param_dist, cv=5)\n",
+        "\n",
+        "# Fit it to the data\n",
+        "tree_cv.fit(X,y)\n",
+        "\n",
+        "# Print the tuned parameters and score\n",
+        "print(\"Tuned Decision Tree Parameters: {}\".format(tree_cv.best_params_))\n",
+        "print(\"Best score is {}\".format(tree_cv.best_score_))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "aZdXJmD8jBHc"
+      },
+      "source": [
+        "# **Hold-out set in practice I: Classification**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "lfv9Q0q5jDiS"
+      },
+      "source": [
+        "Create the hyperparameter grid:\n",
+        "Use the array c_space as the grid of values for 'C'.\n",
+        "For 'penalty', specify a list consisting of 'l1' and 'l2'.\n",
+        "Instantiate a logistic regression classifier.\n",
+        "Create training and test sets. Use a test_size of 0.4 and random_state of 42. In practice, the test set here will function as the hold-out set.\n",
+        "Tune the hyperparameters on the training set using GridSearchCV with 5-folds. This involves first instantiating the GridSearchCV object with the correct parameters and then fitting it to the training data.\n",
+        "Print the best parameter and best score obtained from GridSearchCV by accessing the best_params_ and best_score_ attributes of logreg_cv."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "nE7n8hWrjGwC"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.linear_model import LogisticRegression\n",
+        "from sklearn.model_selection import GridSearchCV\n",
+        "\n",
+        "# Create the hyperparameter grid\n",
+        "c_space = np.logspace(-5, 8, 15)\n",
+        "param_grid = {'C': c_space, 'penalty': ['l1', 'l2']}\n",
+        "\n",
+        "# Instantiate the logistic regression classifier: logreg\n",
+        "logreg = LogisticRegression()\n",
+        "\n",
+        "# Create train and test sets\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.4, random_state=42)\n",
+        "\n",
+        "# Instantiate the GridSearchCV object: logreg_cv\n",
+        "logreg_cv = GridSearchCV(logreg,param_grid,cv=5)\n",
+        "\n",
+        "# Fit it to the training data\n",
+        "logreg_cv.fit(X_train,y_train)\n",
+        "\n",
+        "# Print the optimal parameters and best score\n",
+        "print(\"Tuned Logistic Regression Parameter: {}\".format(logreg_cv.best_params_))\n",
+        "print(\"Tuned Logistic Regression Accuracy: {}\".format(logreg_cv.best_score_))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "UMEf9i2JlH9x"
+      },
+      "source": [
+        "# **Hold-out set in practice II: Regression**"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "R858AwYolMzO"
+      },
+      "source": [
+        "There is another type of regularized regression known as the elastic net. In elastic net regularization, the penalty term is a linear combination of the L1\n",
+        " and L2\n",
+        " penalties:"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "joPgUC6glNnh"
+      },
+      "source": [
+        "# Import necessary modules\n",
+        "from sklearn.linear_model import ElasticNet\n",
+        "from sklearn.metrics import mean_squared_error\n",
+        "from sklearn.model_selection import GridSearchCV,train_test_split\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "\n",
+        "# Create train and test sets\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.4,random_state=42)\n",
+        "\n",
+        "# Create the hyperparameter grid\n",
+        "l1_space = np.linspace(0, 1, 30)\n",
+        "param_grid = {'l1_ratio': l1_space}\n",
+        "\n",
+        "# Instantiate the ElasticNet regressor: elastic_net\n",
+        "elastic_net = ElasticNet()\n",
+        "\n",
+        "# Setup the GridSearchCV object: gm_cv\n",
+        "gm_cv = GridSearchCV(elastic_net, param_grid, cv=5)\n",
+        "\n",
+        "# Fit it to the training data\n",
+        "gm_cv.fit(X_train,y_train)\n",
+        "# Predict on the test set and compute metrics\n",
+        "y_pred = gm_cv.predict(X_test)\n",
+        "r2 = gm_cv.score(X_test, y_test)\n",
+        "mse = mean_squared_error(y_test, y_pred)\n",
+        "print(\"Tuned ElasticNet l1 ratio: {}\".format(gm_cv.best_params_))\n",
+        "print(\"Tuned ElasticNet R squared: {}\".format(r2))\n",
+        "print(\"Tuned ElasticNet MSE: {}\".format(mse))\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "ccZfBhxA006v"
+      },
+      "source": [
+        "**Assignment Question **"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "s4qz2GVM0zZm"
+      },
+      "source": [
+        "from sklearn.linear_model import ElasticNet\n",
+        "from sklearn.metrics import mean_squared_error\n",
+        "from sklearn.model_selection import GridSearchCV\n",
+        "from sklearn.model_selection import ShuffleSplit\n",
+        "\n",
+        "# Seperating features from predictor and dropping the recording_date_time column\n",
+        "X = weather_data_with_dummy.drop(['recording_date_time','temperature'],axis = 1).values\n",
+        "y = weather_data_with_dummy['temperature'].values\n",
+        "\n",
+        "# Instantiate the ElasticNet regressor: elastic_net\n",
+        "elastic_net = ElasticNet(normalize = True)\n",
+        "\n",
+        "# Dividing the data into 40/60 ratio and doing a number of splits of 10\n",
+        "ss = ShuffleSplit(n_splits = 10, test_size = 0.60,train_size = 0.40, random_state = 0)\n",
+        "\n",
+        "# Create the hyperparameter grid\n",
+        "param_grid = {'alpha':[1e-5,1e-4,1e-3,1e-2,1e-1,1,2,3,4,5], 'l1_ratio':[1e-5,1e-4,1e-3,1e-2,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]}\n",
+        "\n",
+        "# Setup the GridSearchCV object: using elastic net\n",
+        "gm_cv = GridSearchCV(elastic_net, param_grid, scoring='neg_mean_absolute_error' , cv=ss)\n",
+        "\n",
+        "# Fit it to the  data\n",
+        "gm_cv.fit(X,y)\n",
+        "\n",
+        "# Found the best parameters\n",
+        "print(\"Best Parameters: \",gm_cv.best_params_)\n",
+        "print(\"Mean Absolute Error is:\",-gm_cv.best_score_)\n",
+        "\n"
+      ],
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
