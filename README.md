@@ -21,6 +21,9 @@ It contains implementation of various Supervised and Unsupervised Machine Learni
 - Implement PCA on the dataset
 - Plot captured variance with respect to increasing latent dimensionality
 
+=>Book Recommendation Based On Text Classification
+The purpose of this project was the recommendation of a new book to a reader based on the content of the previous book a reader read. The whole content of each book was converted into tokens. Stop words were removed from the tokens and then the stemming process was implemented on the tokens. A tf-idf model (term frequency-inverse document frequency) was then implemented to define the importance of each word depending on how frequent it is in this text and how infrequent it is in all the other documents. As a result, a high tf-idf score for a word will indicate that this word is specific to this text. Furthermore, Cosine similarity was then implemented to find the pairwise difference between each book from the other book. Lastly, the result was visualized using a dendrogram to show the recommended books after reading a specific book. The data set used for this project was a list of all books written by Charles Dickens available at Project Gutenberg.
+
 =>Forcasting temperature based on yearly weather data: 
 Environment and its changes are the most complex system.The dataset contains total 10 features. Each row contains an hourly record of weather status and the data was recorded for the time period between 2006 and 2016.This project implements Linear Regression to predict temperature and implement Logistic Regresion to predict class label for precipitation type.  Following steps were performed:
 - Loading the dataset into a pandas dataframe
@@ -32,6 +35,16 @@ Environment and its changes are the most complex system.The dataset contains tot
 - Create a regularised Regression model by implementing Ridge Regression, Grid Search CV, kfold Cross validation and calculate accuracy
 - Implement Logistic Regression to predict Precipitation Type Columns class label
 - Discuss the test performance using precision, recall and confusion matrix
+
+=>Classification model to predict the approval of a credit card application
+The aim of the project was to overcome the task of manually analyzing the credit card applications and using the power of machine learning to create an automatic credit card approval predictor using ML techniques. The data set used for this project was taken from Credit Card Approval Dataset from the UCI Machine learning Repository. The dataset was anonymized for confidentiality purposes. This project involved loading the data, filling the missing values using means for numerical columns, and most frequent values for categorical columns. Moreover, the categorical columns were then converted to numerical using One hot encoder. The numerical columns were also standardized between 0 and 1. The data set was then split in train and the test split and logistic model was then implemented. To improve the accuracy of the model a regularized logistic model was then created using hyperparameter tuning and 5-fold cross-validation. The classification accuracy of the model was recorded as 85%. A classification report and confusion matrix was also created to better understand the results.
+
+=> Categorization of invoices into categories(Salary,food,Traveling) using Natural Language Procsssing
+Most of the companies spent loads of money at various places like employee salaries, buying raw materials, transport etc which makes it difficult to manually catogorise each invoice in a relevant category. This helps later as the company would know where did they spent the most amount of the money. This project involces loading a dataset of Text invoices using pyhon. Performing text processing by removing stop words and perform stemming and lemitization. Features are then seperated from the class labels(Salary, food, raw material etc) and the dataset is divided into test and train set in 70/30 ratio. Then CNN, sequential model with LST layerand RNN models are implemented to perform Text Classification and accuracy is noted for each of the model. All three models use loss='categorical_crossentropy', optimizer='adam', metrics as accuracy. Graph for accuracy and loss are plotted and the model is fit for certain amount of epochs. Accuracy of the model is calculated on the test set. RNN model records the highest Text Classification accuracy of 89.45%.
+
+
+
+
 
 
 
